@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :transactions
   resources :members
   get '/webhook/whatsapp' => 'webhooks#whatsapp'
   post '/webhook/whatsapp' => 'webhooks#whatsapp'
