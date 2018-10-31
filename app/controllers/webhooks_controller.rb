@@ -17,13 +17,13 @@ class WebhooksController < ApplicationController
     message = params['Body'].split(' ')
     to = message[1].downcase == 'to' ? Member.find_by(name: message[2]) : Member.find_by(contact_numbers: params['From'].split(':').last)
     from = message[1].downcase == 'from' ?  Member.find_by(name: message[2]) : Member.find_by(contact_numbers: params['From'].split(':').last)
-    transaction = Transaction.new(lender: from, borrower: to)
+    transaction = Transaction.new(from: from, to: to)
     transaction.amount = message[0]
     transaction.notes = params['Body'].downcase.split('for').last
     twilio.messages.create(
       from: params['To'],
       to: params['From'],
-      body: "Registered #{transaction.to_json}"
+      body: "```Registered ₹```*#{transaction.amount}* ```from``` *#{transaction.from.name.capitalize}* ```to``` *#{transaction.to.name.capitalize}*"
     )
     transaction.save!
   end

@@ -17,8 +17,8 @@
     <% @transactions.each do |transaction| %>
       <tr>
         <td><%= transaction.created_at %></td>
-        <td><%= transaction.lender.name %></td>
-        <td><%= transaction.borrower.name %></td>
+        <td><%= transaction.from.name %></td>
+        <td><%= transaction.to.name %></td>
         <td><%= transaction.amount %></td>
         <td><%= transaction.notes %></td>
         <td><%= link_to 'Show', transaction %></td>

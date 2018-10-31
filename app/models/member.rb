@@ -7,7 +7,7 @@ class Member
   field :email, type: String
   field :contact_numbers, type: Array, default: []
 
-  has_many :lent_transactions, class_name: 'Transaction', inverse_of: :lender
-  has_many :borrowed_transactions, class_name: 'Transaction', inverse_of: :borrower
+  has_many :from_transactions, class_name: 'Transaction', inverse_of: :from
+  has_many :to_transactions, class_name: 'Transaction', inverse_of: :to
 
 end
