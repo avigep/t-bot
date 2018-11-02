@@ -9,8 +9,8 @@ class TwilioService
 
   private
 
-  def self.message_body(result)
-    result == :success ? "```Transaction saved.\n\n₹```*#{params[:target].amount}* ```\n\nfrom``` *#{params[:target].from.name.capitalize}* ```\n\nto``` *#{params[:target].to.name.capitalize}*" : "```Fail to save transaction. ```"
+  def self.message_body(params)
+    params[:result] == :success ? "```Transaction saved.\n\n₹```*#{params[:target].amount}* ```\n\nfrom``` *#{params[:target].from.name.capitalize}* ```\n\nto``` *#{params[:target].to.name.capitalize}*" : "```Fail to save transaction. ```"
   end
 
   def self.twilio_client
