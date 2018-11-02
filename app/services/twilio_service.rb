@@ -1,8 +1,8 @@
 class TwilioService
   def self.deliver(params)
     self.twilio_client.messages.create(
-      from: params[:to],
-      to: params[:from],
+      from: params[:form],
+      to: params[:to],
       body: message_body(params)
       )
   end
