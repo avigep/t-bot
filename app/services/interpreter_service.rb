@@ -31,9 +31,9 @@ class InterpreterService
     case @intent.to_sym
     when :incoming_transaction
      to = Member.find_by(contact_numbers: @params['From'].split(':').last)
-     from = Member.find_by(name: @wit_response['entities']['contact'].first['value'])
+     from = Member.find_or_create_by(name: @wit_response['entities']['contact'].first['value'])
     when :outgoing_transaction
-     to = Member.find_by(name: @wit_response['entities']['contact'].first['value'])
+     to = Member.find_or_create_by(name: @wit_response['entities']['contact'].first['value'])
      from = Member.find_by(contact_numbers: @params['From'].split(':').last)
     else
       to = nil
