@@ -3,7 +3,7 @@ class TwilioService
     self.twilio_client.messages.create(
       from: params[:to],
       to: params[:from],
-      body: message_body(params[:result])
+      body: message_body(params)
       )
   end
 
