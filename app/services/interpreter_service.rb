@@ -33,7 +33,7 @@ class InterpreterService
      to = Member.find_by(contact_numbers: @params['From'].split(':').last)
      from = Member.find_or_create_by(name: @wit_response['entities']['contact'].first['value'].downcase)
     when :outgoing_transaction
-     to = Member.find_or_create_by(name: @wit_response['entities']['contact'].first['value'.downcase])
+     to = Member.find_or_create_by(name: @wit_response['entities']['contact'].first['value'].downcase)
      from = Member.find_by(contact_numbers: @params['From'].split(':').last)
     else
       to = nil
