@@ -18,8 +18,8 @@ class InterpreterService
     TwilioService.deliver(
       { result: result,
         target: target,
-        from: @params['From'],
-        to: @params['To'],
+        from: @params['To'], # Yes I know!
+        to: @params['From']
       }
     )
     {"message": result.to_s}
