@@ -18,6 +18,7 @@ class TwilioService
     when :report_daily
       params[:message]
     else
+      params[:message]
     end
   end
 

@@ -14,7 +14,16 @@ class InterpreterService
       # TODO add contact as param
       DailyReportJob.new({to: @params['From'], from: @params['To'], contact: ''}).perform
     else
-      EmptyTarget.new
+      TwilioService.deliver(
+        {
+          type: :undefined,
+          result: :fail,
+          message: EmptyTarget.message,
+          from: @params['To'],
+          to: @params['From']
+        }
+      )
+      :fail
     end
 
     {"message": @result.to_s}
