@@ -1,4 +1,5 @@
 class DailyReportJob < ApplicationJob
+  # TODO refactor
   queue_as :default
   attr_accessor :target, :params, :result
 
@@ -45,8 +46,8 @@ def perform(*args)
     message << "*Total outgoing: ₹#{@target[:summary][:total_outgoing]}*\n"
     message << "*Total incoming: ₹#{@target[:summary][:total_incoming]}*\n"
     message << "----------------------------\n"
-    message << @target[:details][:outgoing].map{|t| "₹#{t.amount}  #{t.from.name.capitalize} ==> #{t.to.name.capitalize}\n"}.join('')
-    message << @target[:details][:incoming].map{|t| "₹#{t.amount}  #{t.from.name.capitalize} <== #{t.to.name.capitalize}\n"}.join('')
+    message << @target[:details][:outgoing].map{|t| "₹#{t.amount.to_s.rjust(6)}  #{t.from.name.capitalize.ljust(10)} ==> #{t.to.name.capitalize.rjust(10)}\n"}.join('')
+    message << @target[:details][:incoming].map{|t| "₹#{t.amount.to_s.rjust(6)}  #{t.from.name.capitalize.ljust(10)} <== #{t.to.name.capitalize.rjust(10)}\n"}.join('')
     TwilioService.deliver(
       {
         type: :report_daily,
@@ -58,5 +59,4 @@ def perform(*args)
       }
     )
   end
-
 end
