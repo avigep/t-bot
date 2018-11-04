@@ -3,29 +3,39 @@ class InterpreterService
     @wit_response = wit_client.message(params['Body'])
     @intent = @wit_response['entities']['intent'].first['value'].to_sym rescue nil
     @params = params
-    #@entities = build_entities
+    @result = nil
   end
 
   def execute_with_response
-    target = case @intent
+    @result = case @intent
     when :incoming_transaction, :outgoing_transaction
-      Transaction.new(transaction_attributes)
+      transaction_handler
+    when :report_daily
+      # TODO add contact as param
+      DailyReportJob.new({to: @params['From'], from: @params['To'], contact: ''}).perform
     else
       EmptyTarget.new
     end
-    result = target.save! ? :success : :fail
-    # TODO : add flag for sending reply
+
+    {"message": @result.to_s}
+  end
+
+  private
+
+  def transaction_handler
+    transaction = Transaction.new(transaction_attributes)
+    result = transaction.save! ? :success : :fail
     TwilioService.deliver(
-      { result: result,
-        target: target,
+      {
+        type: :transaction,
+        result: result,
+        target: transaction,
         from: @params['To'], # Yes I know!
         to: @params['From']
       }
     )
-    {"message": result.to_s}
+    result
   end
-
-  private
 
   def transaction_attributes
     case @intent.to_sym

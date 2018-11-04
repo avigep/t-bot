@@ -1,5 +1,7 @@
 class TwilioService
   def self.deliver(params)
+    Rails.logger.info("Twilio Message with : #{params.to_json}")
+    # TODO get message from caller
     self.twilio_client.messages.create(
       from: params[:from],
       to: params[:to],
@@ -10,7 +12,13 @@ class TwilioService
   private
 
   def self.message_body(params)
-    params[:result] == :success ? "```Transaction saved.\n\n₹```*#{params[:target].amount}* ```\n\nfrom``` *#{params[:target].from.name.capitalize}* ```\n\nto``` *#{params[:target].to.name.capitalize}*" : "```Fail to save transaction. ```"
+    case params[:type]
+    when :transaction
+      params[:result] == :success ? "```Transaction saved.\n\n₹```*#{params[:target].amount}* ```\n\nfrom``` *#{params[:target].from.name.capitalize}* ```\n\nto``` *#{params[:target].to.name.capitalize}*" : "```Fail to save transaction. ```"
+    when :report_daily
+      params[:message]
+    else
+    end
   end
 
   def self.twilio_client
