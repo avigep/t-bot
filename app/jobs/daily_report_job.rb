@@ -45,8 +45,8 @@ def perform(*args)
     message << "*Total outgoing: ₹#{@target[:summary][:total_outgoing]}*\n"
     message << "*Total incoming: ₹#{@target[:summary][:total_incoming]}*\n"
     message << "----------------------------\n"
-    message << @target[:details][:outgoing].map{|t| " ==> ₹#{t.amount} from #{t.from.name.capitalize} to #{t.to.name.capitalize}\n"}.join('')
-    message << @target[:details][:incoming].map{|t| " <== ₹#{t.amount} from #{t.from.name.capitalize} to #{t.to.name.capitalize}\n"}.join('')
+    message << @target[:details][:outgoing].map{|t| "₹#{t.amount}  #{t.from.name.capitalize} ==> #{t.to.name.capitalize}\n"}.join('')
+    message << @target[:details][:incoming].map{|t| "₹#{t.amount}  #{t.from.name.capitalize} <== #{t.to.name.capitalize}\n"}.join('')
     TwilioService.deliver(
       {
         type: :report_daily,
