@@ -26,7 +26,7 @@ class InterpreterService
       :fail
     end
 
-    {"message": @result.to_s}
+    { "message": @result.to_s }
   end
 
   private

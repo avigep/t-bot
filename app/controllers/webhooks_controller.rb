@@ -3,7 +3,7 @@ class WebhooksController < ApplicationController
 
   def whatsapp
     Rails.logger.info("Incoming -> Whatsapp -> params : #{params.inspect}")
-    @interpreter = InterpreterService.new(params)
-    render json: @interpreter.execute_with_response
+    response = InterpreterService.new(params).execute_with_response
+    render json: response
   end
 end
