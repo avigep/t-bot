@@ -67,7 +67,7 @@ class InterpreterService
   end
 
   def wit_client
-    @wit ||= Wit.new(access_token: ENV['wit_access_token'])
+    @wit ||= Wit.new(access_token: ENV['wbot_wit_access_token'])
   end
 
 end

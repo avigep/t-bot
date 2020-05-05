@@ -23,7 +23,7 @@ class TwilioService
   end
 
   def self.twilio_client
-    @twilio ||= Twilio::REST::Client.new(ENV['twilio_account_sid'], ENV['twilio_auth_token'])
+    @twilio ||= Twilio::REST::Client.new(ENV['wbot_twilio_account_sid'], ENV['wbot_twilio_auth_token'])
   end
 
 end
