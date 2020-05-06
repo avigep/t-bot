@@ -14,7 +14,13 @@ class TwilioService
   def self.message_body(params)
     case params[:type]
     when :transaction
-      params[:result] == :success ? "```Transaction saved.\n\n``` *₹#{params[:target].amount}*\n\n *#{params[:target].from.name.capitalize}* ==> *#{params[:target].to.name.capitalize}*" : "```Fail to save transaction. ```"
+      # params[:result] == :success ? "```Transaction saved.\n\n``` *₹#{params[:transaction].amount}*\n\n *#{params[:transaction].from.name.capitalize}* ==> *#{params[:target].to.name.capitalize}*" : "```Fail to save transaction. ```"
+      # Assuming result is success that is why notification is triggered
+      if params[:target] == :initiator
+        "```Transaction saved.\n\n``` *₹#{params[:transaction].amount}*\n\n *#{params[:transaction].from.name.capitalize}* ==> *#{params[:transaction].to.name.capitalize}*"
+      else
+        "```Transaction Added by #{params[:transaction].to.name}.\n\n``` *₹#{params[:transaction].amount}*\n\n *#{params[:transaction].from.name.capitalize}* ==> *#{params[:transaction].to.name.capitalize}*"
+      end
     when :report_daily
       params[:message]
     else

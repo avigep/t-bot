@@ -1,5 +1,5 @@
 class WebhooksController < ApplicationController
-  skip_before_action  :verify_authenticity_token
+  skip_before_action :verify_authenticity_token
 
   def whatsapp
     Rails.logger.info("Incoming -> Whatsapp -> params : #{params.inspect}")

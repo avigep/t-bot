@@ -34,16 +34,34 @@ class InterpreterService
   def transaction_handler
     transaction = Transaction.new(transaction_attributes)
     result = transaction.save! ? :success : :fail
-    TwilioService.deliver(
-      {
-        type: :transaction,
-        result: result,
-        target: transaction,
-        from: @params['To'], # Yes I know!
-        to: @params['From']
-      }
-    )
+    if result == :success
+      TransactionNotificationJob.new(transaction).perform
+    else
+      Rails.logger.error("Error saving transaction:  #{transaction.errors}")
+    end
     result
+    # transaction = Transaction.new(transaction_attributes)
+    # result = transaction.save! ? :success : :fail
+    # TwilioService.deliver(
+    #   {
+    #     type: :transaction,
+    #     result: result,
+    #     target: transaction,
+    #     from: @params['To'], # Yes I know!
+    #     to: "whatsapp:#{transaction.from.contact_numbers.first}"
+    #   }
+    # )
+
+    # TwilioService.deliver(
+    #   {
+    #     type: :transaction,
+    #     result: result,
+    #     target: transaction,
+    #     from: @params['To'],
+    #     to: "whatsapp:#{transaction.to.contact_numbers.first}"
+    #   }
+    # )
+    # result
   end
 
   def transaction_attributes
