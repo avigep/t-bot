@@ -1,4 +1,4 @@
-class InterpreterService
+class TextInterpreterService
   def initialize(params)
     @wit_response = wit_client.message(params['Body'])
     @intent = @wit_response['entities']['intent'].first['value'].to_sym rescue nil
