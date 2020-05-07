@@ -8,24 +8,31 @@ class TextInterpreterService
 
   def execute_with_response
     @result = case @intent
-    when :incoming_transaction, :outgoing_transaction
-      transaction_handler
-    when :report_daily
-      # TODO add contact as param
-      DailyReportJob.new({to: @params['From'], from: @params['To'], contact: ''}).perform
-    else
-      TwilioService.deliver(
-        {
-          type: :undefined,
-          result: :fail,
-          message: EmptyTarget.message,
-          from: @params['To'],
-          to: @params['From']
-        }
-      )
-      :fail
-    end
-
+              when :incoming_transaction, :outgoing_transaction
+                transaction = {
+                  target_name: @wit_response['entities']['contact'].first['value'].downcase,
+                  amount: @wit_response['entities']['number'].first['value'],
+                  notes: @wit_response['_text'],
+                  intent: @intent,
+                  raw_params: @params
+                }
+                TransactionAddJob.new(transaction).perform
+              when :report_daily
+                # TODO add contact as param
+                DailyReportJob.new({to: @params['From'], from: @params['To'], contact: ''}).perform
+              else
+                # TODO move to twilio service
+                TwilioService.deliver(
+                  {
+                     type: :undefined,
+                     result: :fail,
+                     message: EmptyTarget.message,
+                     from: @params['To'],
+                     to: @params['From']
+                  }
+                )
+                :fail
+              end
     { "message": @result.to_s }
   end
 
