@@ -5,17 +5,23 @@ class MediaInterpreterService
   end
 
   def execute_with_response
-    case @type
-    when 'text/vcard'
-      member_params = {
-        type: :vcard,
-        media_link: @params['MediaUrl0'],
-        added_by: @params['From']
-      }
-      MemberAddJob.new(member_params).perform
-    else
-      Rails.logger.error("Unknow MediaContentType0: #{@parms.inspect}")
-    end
-    { 'member': 'Status unknown' }
+    resp = case @type
+           when 'text/vcard'
+             MemberAddJob.new(member_params).perform
+           else
+             Rails.logger.error("Unknow MediaContentType0: #{@params.inspect}")
+             "Unsupported MediaContentType0 #{@params.to_json}"
+           end
+    { status: resp }
+  end
+
+  private
+
+  def member_params
+    {
+      type: :vcard,
+      media_link: @params['MediaUrl0'],
+      added_by: @params['From']
+    }
   end
 end

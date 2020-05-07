@@ -1,31 +1,42 @@
 class MemberAddJob < ApplicationJob
-
   queue_as :default
+
+  DEFAULT_SENDER = 'whatsapp:+14155238886'.freeze
+  FAIL_MESSAGE = '```fail to add member.```' .freeze
+  SUCCESS_MESSAGE = '```Member``` *_NAME_* ```added successfully.```'.freeze
 
   def initialize(params)
     @params = params
+    @raw_vcard = RestClient.get(@params[:media_link]).body
+    @member_params = parse_vcard
+    @notification_params = {
+      type: :add_member, member: nil,
+      result: :fail, to: params[:added_by],
+      from: DEFAULT_SENDER, message: FAIL_MESSAGE
+    }
     super
   end
 
-  def perform(*args)
-    member_params = { contact_numbers: [] }
-    raw_vcard = RestClient.get(@params[:media_link]).body
-    raw_vcard.lines.each do |line|
+  def perform(*_args)
+    member = Member.find_or_create_by(@member_params)
+    @notification_params[:member] = member
+    if member.save!
+      @notification_params[:result] = :success
+      @notification_params[:message] = SUCCESS_MESSAGE.gsub('_NAME_', member.name)
+    end
+    TwilioService.deliver(@notification_params)
+  end
+
+  private
+
+  def parse_vcard
+    member_params = { name: nil, contact_numbers: [] }
+    @raw_vcard.lines.each do |line|
       line.chomp!
       prop, value = line.split(':')
       member_params[:name] = value if prop == 'FN'
-      if ['tel;type=work;type=pre', 'tel;type=cell', 'tel;type=home', 'tel;type=work'].include?(prop.downcase!)
-        member_params[:contact_numbers] << value
-      end
+      member_params[:contact_numbers] << value if prop.start_with?('tel;')
     end
-    member = Member.find_or_create_by(member_params)
-    if member.save!
-      notification_params = { type: :add_member, member: member, result: :success }
-    else
-      notification_params = { type: :add_member, member: member, result: :fail }
-    end
-    notification_params[:to] = @params[:added_by]
-    notification_params[:from] = 'whatsapp:+14155238886'
-    TwilioService.deliver(notification_params)
+    member_params
   end
 end
