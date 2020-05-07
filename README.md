@@ -1,24 +1,54 @@
-# README
+# Transactions bot
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Whatsapp Bot for managing offline payment transactions built using [Whatsapp APIs by Twilio](https://www.twilio.com/whatsapp) and Wit.ai
 
-Things you may want to cover:
+## Purpose
+>Large working population in India is in unorganized sector often receiving payments daily or weekly. 
+<br>There was lack of maintaining records for such payment at my farm so I created this simple bot which anyone can operate and keep track of payments made to labor and farm workers.
+<br> Also I wanted to develop PoC based on Twilio APIs and Wit AI
 
-* Ruby version
+## Features and Demo
 
-* System dependencies
+> Supports messages like
+```
+{amount} to {name}
+to register an outgoing transaction.
 
-* Configuration
+{amount} from {name}
+to register an incoming transaction.
 
-* Database creation
+daily report
+to get daily incoming and outgoing summary.
 
-* Database initialization
+weekly report
+to get weekly incoming and outgoing summary.
 
-* How to run the test suite
+help
+to get this description.
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+> You can add contact to the chat and it will be saved as member
 
-* Deployment instructions
+> Adding transactions
 
-* ...
+> Checking daily reports
+
+## Dependencies
+- Ruby 2.6.6
+- Rails 5.2.1
+- MongoDB 4.2.6
+
+## Build Instructions
+```
+export wbot_twilio_account_sid='xxxx'
+export wbot_twilio_auth_token='xxxx'
+export wbot_wit_access_token='xxxx'
+```
+
+```
+bundle install
+rails s
+```
+## Tests
+- WIP
+
