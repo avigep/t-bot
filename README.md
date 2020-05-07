@@ -1,6 +1,6 @@
 # Transactions bot
 
-Whatsapp Bot for managing offline payment transactions built using [Whatsapp APIs by Twilio](https://www.twilio.com/whatsapp) and Wit.ai
+Whatsapp Bot for managing offline payment transactions built using [Whatsapp APIs by Twilio](https://www.twilio.com/whatsapp) and [Wit.ai](https://wit.ai/)
 
 ## Purpose
 >Large working population in India is in unorganized sector often receiving payments daily or weekly. 
