@@ -9,11 +9,13 @@ class MediaInterpreterService
     when 'text/vcard'
       member_params = {
         type: :vcard,
-        media_link: @params['MediaUrl0']
+        media_link: @params['MediaUrl0'],
+        added_by: @params['From']
       }
       MemberAddJob.new(member_params).perform
     else
       Rails.logger.error("Unknow MediaContentType0: #{@parms.inspect}")
     end
+    { 'member': 'Status unknown' }
   end
 end

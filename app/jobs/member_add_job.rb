@@ -18,6 +18,14 @@ class MemberAddJob < ApplicationJob
         member_params[:contact_numbers] << value
       end
     end
-    Member.create!(member_params)
+    member = Member.find_or_create_by(member_params)
+    if member.save!
+      notification_params = { type: :add_member, member: member, result: :success }
+    else
+      notification_params = { type: :add_member, member: member, result: :fail }
+    end
+    notification_params[:to] = @params[:added_by]
+    notification_params[:from] = 'whatsapp:+14155238886'
+    TwilioService.deliver(notification_params)
   end
 end

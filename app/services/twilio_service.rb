@@ -23,6 +23,12 @@ class TwilioService
       end
     when :report_daily
       params[:message]
+    when :add_member
+      if params[:result] == :success
+        "```Member``` *#{params[:member].name}* ```added successfully.```"
+      else
+        '```fail to add member.```'
+      end
     else
       params[:message]
     end
