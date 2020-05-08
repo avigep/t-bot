@@ -6,7 +6,7 @@ class TextInterpreterService
     @result = nil
   end
 
-  def execute_with_response
+  def execute
     @result = case @intent
               when :incoming_transaction, :outgoing_transaction
                 transaction = {

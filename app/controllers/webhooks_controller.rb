@@ -3,11 +3,11 @@ class WebhooksController < ApplicationController
 
   def whatsapp
     Rails.logger.info("Incoming -> Whatsapp -> params : #{params.inspect}")
-    if params[:MediaContentType0].present?
-      response = MediaInterpreterService.new(params).execute_with_response
-    else
-      response = TextInterpreterService.new(params).execute_with_response
-    end
+    response = if params[:MediaContentType0].present?
+                 MediaInterpreterService.new(params).execute
+               else
+                 TextInterpreterService.new(params).execute
+               end
     render json: response
   end
 end
