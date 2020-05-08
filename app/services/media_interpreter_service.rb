@@ -4,7 +4,7 @@ class MediaInterpreterService
     @params = params
   end
 
-  def execute_with_response
+  def execute
     resp = case @type
            when 'text/vcard'
              MemberAddJob.new(member_params).perform
