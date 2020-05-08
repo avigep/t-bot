@@ -4,7 +4,6 @@ class EmptyTarget
   end
 
   def self.message
-    msg = "Sorry command not recognized. \n\n"
     msg << "Try following \n\n"
     msg << "*{amount} to {name}*\n"
     msg << "_to register an outgoing transaction._\n\n"
@@ -16,6 +15,6 @@ class EmptyTarget
     msg << "_to get weekly incoming and outgoing summary._\n\n"
     msg << "*help*\n"
     msg << "_to get this description._\n\n"
+    msg << "*To add members send contact to this chat*\n"
   end
-
 end
